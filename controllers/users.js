@@ -3,10 +3,9 @@ const User = require('../models/User');
 module.exports.getUser = async (req, res) => {
   try {
     const users = await User.find({});
-    res.status(200).send(users);
-    return;
+    return res.status(200).send(users);
   } catch (error) {
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
 
@@ -26,13 +25,12 @@ module.exports.createUser = async (req, res) => {
   const { name, about, avatar } = req.body;
   try {
     const user = await User.create({ name, about, avatar });
-    res.status(200).send(user);
-    return;
+    return res.status(200).send(user);
   } catch (errors) {
     if (errors.name === 'ValidationError') {
-      res.status(400).send({ message: 'Некорректные данные ввода' });
+      return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
   }
 };
 
@@ -46,16 +44,14 @@ module.exports.updateProfile = async (req, res) => {
       { new: true, runValidators: true },
     );
     if (!user) {
-      res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
-      return;
+      return res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
     }
-    res.status(200).send(user);
-    return;
+    return res.status(200).send(user);
   } catch (errors) {
     if (errors.name === 'ValidatorError') {
-      res.status(400).send({ message: 'Некорректные данные ввода' });
+      return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
   }
 };
 
@@ -69,15 +65,13 @@ module.exports.updateAvatar = async (req, res) => {
       { new: true, runValidators: true },
     );
     if (!user) {
-      res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
-      return;
+      return res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
     }
-    res.status(200).send(user);
-    return;
+    return res.status(200).send(user);
   } catch (errors) {
     if (errors.name === 'ValidatorError') {
-      res.status(400).send({ message: 'Некорректные данные ввода' });
+      return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
   }
 };

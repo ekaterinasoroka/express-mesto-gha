@@ -3,10 +3,9 @@ const Card = require('../models/Card');
 module.exports.getCard = async (req, res) => {
   try {
     const card = await Card.find({});
-    res.status(200).send(card);
-    return;
+    return res.status(200).send(card);
   } catch (error) {
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
 
@@ -15,14 +14,12 @@ module.exports.createCard = async (req, res) => {
   const { name, link } = req.body;
   try {
     const card = await Card.create({ name, link, owner });
-    res.status(200).send(card);
-    return;
+    return res.status(200).send(card);
   } catch (errors) {
     if (errors.name === 'ValidationError') {
-      res.status(400).send({ message: 'Ошибка в запросе', ...errors });
-      return;
+      return res.status(400).send({ message: 'Ошибка в запросе', ...errors });
     }
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
   }
 };
 
@@ -30,12 +27,11 @@ module.exports.deleteCardById = async (req, res) => {
   try {
     const card = await Card.findByIdAndRemove(req.params.id);
     if (!card) {
-      res.status(404).send({ message: 'Такой карточки не существует' });
-      return;
+      return res.status(404).send({ message: 'Такой карточки не существует' });
     }
-    res.status(200).send(card);
+    return res.status(200).send(card);
   } catch (error) {
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
 
@@ -46,9 +42,9 @@ module.exports.likeCard = async (req, res) => {
       { $addToSet: { likes: req.user._id } },
       { new: true },
     );
-    res.status(200).send(card);
+    return res.status(200).send(card);
   } catch (error) {
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
 
@@ -59,8 +55,8 @@ module.exports.dislikeCard = (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     );
-    res.status(200).send(card);
+    return res.status(200).send(card);
   } catch (error) {
-    res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
