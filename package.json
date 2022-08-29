@@ -18,9 +18,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yandex-praktikum/express-mesto-gha/issues"
+    "url": "https://github.com/ekaterinasoroka/express-mesto-gha/issues"
   },
-  "homepage": "https://github.com/yandex-praktikum/express-mesto-gha#readme",
+  "homepage": "https://github.com/ekaterinasoroka/express-mesto-gha#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",
