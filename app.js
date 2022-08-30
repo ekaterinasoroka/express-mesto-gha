@@ -7,6 +7,8 @@ const app = express();
 const { UserRoutes } = require('./routes/users');
 const { CardRoutes } = require('./routes/cards');
 
+app.use(express.json());
+
 app.use((req, res, next) => {
   req.user = {
     _id: '63088ae832b2e6e014cb59a1',
