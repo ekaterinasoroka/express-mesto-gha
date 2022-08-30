@@ -12,12 +12,12 @@ module.exports.getUser = async (req, res) => {
 module.exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
-    }
-    return res.status(200).send(user);
+    // if (!user) {
+    //   return res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+    // }
+    res.status(200).send(user);
   } catch (error) {
-    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
 
@@ -27,7 +27,7 @@ module.exports.createUser = async (req, res) => {
     const user = await User.create({ name, about, avatar });
     return res.status(200).send(user);
   } catch (errors) {
-    if (errors.name === 'ValidationError') {
+    if (errors === 'ValidationError') {
       return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
