@@ -24,8 +24,9 @@ module.exports.createCard = async (req, res) => {
 };
 
 module.exports.deleteCardById = async (req, res) => {
+  const { cardId } = req.params;
   try {
-    const card = await Card.findByIdAndRemove(req.params.id);
+    const card = await Card.findByIdAndRemove(cardId);
     if (!card) {
       return res.status(404).send({ message: 'Такой карточки не существует' });
     }
