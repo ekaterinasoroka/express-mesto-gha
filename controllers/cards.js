@@ -42,8 +42,14 @@ module.exports.likeCard = async (req, res) => {
       { $addToSet: { likes: req.user._id } },
       { new: true },
     );
+    if (!card) {
+      return res.status(404).send({ message: 'Такой карточки не существует' });
+    }
     return res.status(200).send(card);
   } catch (error) {
+    if (error.kind === 'ObjectId') {
+      return res.status(400).send({ message: 'Некорректные данные для постановки лайка' });
+    }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
@@ -55,8 +61,14 @@ module.exports.dislikeCard = (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     );
+    if (!card) {
+      return res.status(404).send({ message: 'Такой карточки не существует' });
+    }
     return res.status(200).send(card);
   } catch (error) {
+    if (error.kind === 'ObjectId') {
+      return res.status(400).send({ message: 'Некорректные данные для постановки лайка' });
+    }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };

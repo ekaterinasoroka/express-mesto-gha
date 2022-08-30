@@ -31,7 +31,7 @@ module.exports.createUser = async (req, res) => {
     const user = await User.create({ name, about, avatar });
     return res.status(200).send(user);
   } catch (errors) {
-    if (errors.errors.name === 'ValidatorError') {
+    if (errors.name === 'ValidationError') {
       return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
@@ -52,7 +52,7 @@ module.exports.updateProfile = async (req, res) => {
     }
     return res.status(200).send(user);
   } catch (errors) {
-    if (errors === 'ValidationError') {
+    if (errors.name === 'ValidationError') {
       return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
