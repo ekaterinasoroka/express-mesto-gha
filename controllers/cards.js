@@ -15,11 +15,11 @@ module.exports.createCard = async (req, res) => {
   try {
     const card = await Card.create({ name, link, owner });
     return res.status(200).send(card);
-  } catch (errors) {
-    if (errors.name === 'ValidationError') {
-      return res.status(400).send({ message: 'Ошибка в запросе', ...errors });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).send({ message: 'Ошибка в запросе', ...error });
     }
-    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
+    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
 
