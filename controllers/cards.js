@@ -48,17 +48,17 @@ module.exports.likeCard = async (req, res) => {
     }
     return res.status(200).send(card);
   } catch (error) {
-    if (error.kind === 'ObjectId') {
+    if (error.name === 'CastError') {
       return res.status(400).send({ message: 'Некорректные данные для постановки лайка' });
     }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = async (req, res) => {
   const { cardId } = req.params;
   try {
-    const card = Card.findByIdAndUpdate(
+    const card = await Card.findByIdAndUpdate(
       cardId,
       { $pull: { likes: req.user._id } },
       { new: true, runValidators: true },
@@ -68,7 +68,7 @@ module.exports.dislikeCard = (req, res) => {
     }
     return res.status(200).send(card);
   } catch (error) {
-    if (error.kind === 'ObjectId') {
+    if (error.name === 'CastError') {
       return res.status(400).send({ message: 'Некорректные данные для постановки лайка' });
     }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
