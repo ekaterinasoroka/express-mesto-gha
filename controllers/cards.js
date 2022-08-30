@@ -36,11 +36,12 @@ module.exports.deleteCardById = async (req, res) => {
 };
 
 module.exports.likeCard = async (req, res) => {
+  const { cardId } = req.params;
   try {
     const card = await Card.findByIdAndUpdate(
-      req.params.cardId,
+      cardId,
       { $addToSet: { likes: req.user._id } },
-      { new: true },
+      { new: true, runValidators: true },
     );
     if (!card) {
       return res.status(404).send({ message: 'Такой карточки не существует' });
@@ -55,11 +56,12 @@ module.exports.likeCard = async (req, res) => {
 };
 
 module.exports.dislikeCard = (req, res) => {
+  const { cardId } = req.params;
   try {
     const card = Card.findByIdAndUpdate(
-      req.params.cardId,
+      cardId,
       { $pull: { likes: req.user._id } },
-      { new: true },
+      { new: true, runValidators: true },
     );
     if (!card) {
       return res.status(404).send({ message: 'Такой карточки не существует' });
