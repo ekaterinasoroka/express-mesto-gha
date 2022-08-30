@@ -31,6 +31,9 @@ module.exports.deleteCardById = async (req, res) => {
     }
     return res.status(200).send(card);
   } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).send({ message: 'Некорректные данные для удаления карточки' });
+    }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
   }
 };

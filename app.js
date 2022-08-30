@@ -7,8 +7,6 @@ const app = express();
 const { UserRoutes } = require('./routes/users');
 const { CardRoutes } = require('./routes/cards');
 
-app.use(express.json());
-
 app.use((req, res, next) => {
   req.user = {
     _id: '63088ae832b2e6e014cb59a1',
@@ -19,6 +17,10 @@ app.use((req, res, next) => {
 
 app.use(UserRoutes);
 app.use(CardRoutes);
+
+app.use('*', (req, res) => {
+  res.status(404).send({ message: '404 Not Found' });
+});
 
 async function main(req, res) {
   try {
