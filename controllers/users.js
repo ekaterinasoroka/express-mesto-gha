@@ -11,7 +11,7 @@ module.exports.getUser = async (req, res) => {
 
 module.exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params);
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
     }
@@ -30,7 +30,7 @@ module.exports.createUser = async (req, res) => {
     const user = await User.create({ name, about, avatar });
     return res.status(200).send(user);
   } catch (errors) {
-    if (errors.name === 'ValidatorError') {
+    if (errors.errors.name === 'ValidatorError') {
       return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
@@ -51,7 +51,7 @@ module.exports.updateProfile = async (req, res) => {
     }
     return res.status(200).send(user);
   } catch (errors) {
-    if (errors === 'Validation faled') {
+    if (errors === 'ValidationError') {
       return res.status(400).send({ message: 'Некорректные данные ввода' });
     }
     return res.status(500).send({ message: 'Произошла ошибка на сервере', ...errors });
