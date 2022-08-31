@@ -22,7 +22,7 @@ app.use('*', (req, res) => {
   res.status(404).send({ message: '404 Not Found' });
 });
 
-async function main(req, res) {
+async function main() {
   try {
     await mongoose.connect('mongodb://localhost:27017/mestodb', {
       useNewUrlParser: true,
@@ -30,8 +30,7 @@ async function main(req, res) {
     });
     await app.listen(PORT);
   } catch (error) {
-    console.error(new Error(error));
-    res.status(500).send({ message: 'Ошибка на сервере' });
+    console.error(error);
   }
 }
 
