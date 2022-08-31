@@ -30,6 +30,7 @@ async function main(req, res) {
     });
     await app.listen(PORT);
   } catch (error) {
+    console.error(new Error(error));
     res.status(500).send({ message: 'Ошибка на сервере' });
   }
 }
