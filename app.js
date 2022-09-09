@@ -1,25 +1,33 @@
 const express = require('express');
 
 const mongoose = require('mongoose');
-
-const { PORT = 3000 } = process.env;
-const app = express();
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const { UserRoutes } = require('./routes/users');
 const { CardRoutes } = require('./routes/cards');
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '63088ae832b2e6e014cb59a1',
-  };
-
-  next();
-});
+const { PORT = 3000 } = process.env;
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(UserRoutes);
 app.use(CardRoutes);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: '404 Not Found' });
+});
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'Произошла ошибка на сервере'
+      : message,
+  });
+  next(err);
 });
 
 async function main() {

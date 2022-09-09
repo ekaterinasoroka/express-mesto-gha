@@ -1,15 +1,19 @@
 const Card = require('../models/Card');
+const ForbiddenError = require('../errors/ForbiddenError');
+const ServerError = require('../errors/ServerError');
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
 
-module.exports.getCard = async (req, res) => {
+module.exports.getCard = async (req, res, next) => {
   try {
     const card = await Card.find({});
     return res.status(200).send(card);
   } catch (error) {
-    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return next(new ServerError('Произошла ошибка на сервере'));
   }
 };
 
-module.exports.createCard = async (req, res) => {
+module.exports.createCard = async (req, res, next) => {
   const owner = req.user._id;
   const { name, link } = req.body;
   try {
@@ -17,29 +21,33 @@ module.exports.createCard = async (req, res) => {
     return res.status(200).send(card);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      return res.status(400).send({ message: 'Ошибка в запросе', ...error });
+      return next(new BadRequestError('Ошибка в запросе'));
     }
-    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return next(new ServerError('Произошла ошибка на сервере'));
   }
 };
 
-module.exports.deleteCardById = async (req, res) => {
+module.exports.deleteCardById = async (req, res, next) => {
+  const userId = req.user._id;
   const { cardId } = req.params;
   try {
     const card = await Card.findByIdAndRemove(cardId);
     if (!card) {
-      return res.status(404).send({ message: 'Такой карточки не существует' });
+      return next(new NotFoundError('Такой карточки не существует'));
+    }
+    if (userId !== card.owner.toString()) {
+      return next(new ForbiddenError('Вы не можете удалить чужую карточку'));
     }
     return res.status(200).send(card);
   } catch (error) {
     if (error.name === 'CastError') {
-      return res.status(400).send({ message: 'Некорректные данные для удаления карточки' });
+      return next(new BadRequestError('Некорректные данные для удаления карточки'));
     }
-    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return next(new ServerError('Произошла ошибка на сервере'));
   }
 };
 
-module.exports.likeCard = async (req, res) => {
+module.exports.likeCard = async (req, res, next) => {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
@@ -47,18 +55,18 @@ module.exports.likeCard = async (req, res) => {
       { new: true, runValidators: true },
     );
     if (!card) {
-      return res.status(404).send({ message: 'Такой карточки не существует' });
+      return next(new NotFoundError('Такой карточки не существует'));
     }
     return res.status(200).send(card);
   } catch (error) {
     if (error.name === 'CastError') {
-      return res.status(400).send({ message: 'Некорректные данные для постановки лайка' });
+      return next(new BadRequestError('Некорректные данные для постановки лайка'));
     }
-    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return next(new ServerError('Произошла ошибка на сервере'));
   }
 };
 
-module.exports.dislikeCard = async (req, res) => {
+module.exports.dislikeCard = async (req, res, next) => {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
@@ -66,13 +74,13 @@ module.exports.dislikeCard = async (req, res) => {
       { new: true, runValidators: true },
     );
     if (!card) {
-      return res.status(404).send({ message: 'Такой карточки не существует' });
+      return next(new NotFoundError('Такой карточки не существует'));
     }
     return res.status(200).send(card);
   } catch (error) {
     if (error.name === 'CastError') {
-      return res.status(400).send({ message: 'Некорректные данные для постановки лайка' });
+      return next(new BadRequestError('Некорректные данные для постановки лайка'));
     }
-    return res.status(500).send({ message: 'Произошла ошибка на сервере', ...error });
+    return next(new ServerError('Произошла ошибка на сервере'));
   }
 };
