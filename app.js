@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
 const { UserRoutes } = require('./routes/users');
 const { CardRoutes } = require('./routes/cards');
 
@@ -19,6 +20,8 @@ app.use('*', (req, res) => {
   res.status(404).send({ message: '404 Not Found' });
 });
 
+app.use(errors());
+
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
@@ -27,7 +30,7 @@ app.use((err, req, res, next) => {
       ? 'Ошибка на сервере'
       : message,
   });
-  next(err);
+  next();
 });
 
 async function main() {
