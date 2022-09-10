@@ -19,6 +19,17 @@ app.use('*', (req, res) => {
   res.status(404).send({ message: '404 Not Found' });
 });
 
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'Ошибка на сервере'
+      : message,
+  });
+  next(err);
+});
+
 async function main() {
   try {
     await mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -30,16 +41,5 @@ async function main() {
     console.error(error);
   }
 }
-
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-
-  res.status(statusCode).send({
-    message: statusCode === 500
-      ? 'Ошибка на сервере'
-      : message,
-  });
-  next(err);
-});
 
 main();
