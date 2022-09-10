@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const UserRoutes = require('express').Router();
@@ -10,9 +9,11 @@ const auth = require('../middlewares/auth');
 
 UserRoutes.post('/signup', express.json(), celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/),
+    name: Joi.string().min(2).max(30).default('Жак'),
+    about: Joi.string().min(2).max(30).default('Исследователь океана'),
+    avatar: Joi.string()
+      .regex(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/)
+      .default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png'),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
