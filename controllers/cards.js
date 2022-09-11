@@ -14,7 +14,7 @@ module.exports.getCard = async (req, res, next) => {
 };
 
 module.exports.createCard = async (req, res, next) => {
-  const owner = req.user._id;
+  const owner = req.users._id;
   const { name, link } = req.body;
   try {
     const card = await Card.create({ name, link, owner });
@@ -28,7 +28,7 @@ module.exports.createCard = async (req, res, next) => {
 };
 
 module.exports.deleteCardById = async (req, res, next) => {
-  const userId = req.user._id;
+  const userId = req.users._id;
   const { cardId } = req.params;
   try {
     const card = await Card.findByIdAndRemove(cardId);
@@ -51,7 +51,7 @@ module.exports.likeCard = async (req, res, next) => {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $addToSet: { likes: req.user._id } },
+      { $addToSet: { likes: req.users._id } },
       { new: true, runValidators: true },
     );
     if (!card) {
@@ -70,7 +70,7 @@ module.exports.dislikeCard = async (req, res, next) => {
   try {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $pull: { likes: req.user._id } },
+      { $pull: { likes: req.users._id } },
       { new: true, runValidators: true },
     );
     if (!card) {
