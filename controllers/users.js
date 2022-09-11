@@ -102,7 +102,7 @@ module.exports.login = async (req, res, next) => {
 };
 
 module.exports.updateProfile = async (req, res, next) => {
-  const owner = req.user._id;
+  const owner = req.users._id;
   const { name, about } = req.body;
   try {
     const user = await User.findByIdAndUpdate(
@@ -123,7 +123,7 @@ module.exports.updateProfile = async (req, res, next) => {
 };
 
 module.exports.updateAvatar = async (req, res, next) => {
-  const owner = req.user._id;
+  const owner = req.users._id;
   const { avatar } = req.body;
   try {
     const user = await User.findByIdAndUpdate(
