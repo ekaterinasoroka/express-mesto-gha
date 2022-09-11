@@ -31,14 +31,15 @@ module.exports.deleteCardById = async (req, res, next) => {
   const userId = req.users._id;
   const { cardId } = req.params;
   try {
-    const card = await Card.findByIdAndRemove(cardId);
+    const card = await Card.findById(cardId);
     if (!card) {
       return next(new NotFoundError('Такой карточки не существует'));
     }
     if (userId !== card.owner.toString()) {
       return next(new ForbiddenError('Вы не можете удалить чужую карточку'));
     }
-    return res.status(200).send(card);
+    await Card.findByIdAndRemove(cardId);
+    return res.status(200).send({ message: 'Карточка успешно удалена' });
   } catch (error) {
     if (error.name === 'CastError') {
       return next(new BadRequestError('Некорректные данные для удаления карточки'));

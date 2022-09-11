@@ -15,17 +15,17 @@ CardRoutes.post('/cards', express.json(), celebrate({
 CardRoutes.get('/cards', express.json(), getCard);
 CardRoutes.delete('/cards/:cardId', express.json(), celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().hex().alphanum().length(24),
   }),
 }), deleteCardById);
 CardRoutes.put('/cards/:cardId/likes', express.json(), celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().hex().alphanum().length(24),
   }),
 }), likeCard);
 CardRoutes.delete('/cards/:cardId/likes', express.json(), celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().alphanum().length(24),
+    cardId: Joi.string().hex().alphanum().length(24),
   }),
 }), dislikeCard);
 
