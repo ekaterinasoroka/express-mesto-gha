@@ -17,7 +17,7 @@ module.exports.getUser = async (req, res, next) => {
 };
 
 module.exports.getUserInfo = async (req, res, next) => {
-  const id = req.user._id;
+  const id = req.users._id;
   try {
     const user = await User.findById(id);
     if (!user) {

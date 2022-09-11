@@ -25,12 +25,13 @@ UserRoutes.post('/signin', express.json(), celebrate({
 }), login);
 UserRoutes.use(auth);
 UserRoutes.get('/users', express.json(), getUser);
+UserRoutes.get('/users/me', express.json(), getUserInfo);
 UserRoutes.get('/users/:userId', express.json(), celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().alphanum(),
+    userId: Joi.string().alphanum().length(24),
   }),
 }), getUserById);
-UserRoutes.get('/users/me', express.json(), getUserInfo);
+
 UserRoutes.patch('/users/me', express.json(), celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
