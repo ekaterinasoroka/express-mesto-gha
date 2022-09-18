@@ -89,7 +89,7 @@ module.exports.login = async (req, res, next) => {
 
     const token = jwt.sign({
       _id: user._id,
-    }, 'SECRET');
+    }, process.env.JWT_SECRET);
     res.cookie('jwt', token, {
       maxAge: 3600000,
       httpOnly: true,
