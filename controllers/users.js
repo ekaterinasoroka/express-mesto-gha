@@ -91,7 +91,7 @@ module.exports.login = async (req, res, next) => {
 
     const token = jwt.sign({
       _id: user._id,
-    }, NODE_ENV === 'production' ? JWT_SECRET : 'dex-secret');
+    }, 'SECRET');
     res.cookie('jwt', token, {
       maxAge: 3600000,
       httpOnly: true,
