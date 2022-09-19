@@ -7,8 +7,6 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
-
 module.exports.getUser = async (req, res, next) => {
   try {
     const users = await User.find({});
